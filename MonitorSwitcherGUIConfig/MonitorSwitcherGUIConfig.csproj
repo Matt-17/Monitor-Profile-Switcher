@@ -82,11 +82,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MonitorSwitcherGUI\MonitorSwitcherGUI\MonitorSwitcherGUI.csproj">
+    <ProjectReference Include="..\MonitorSwitcherGUI\MonitorSwitcherGUI.csproj">
       <Project>{85c2ed16-cb28-4374-b747-a4984ef96ce4}</Project>
       <Name>MonitorSwitcherGUI</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MonitorSwitcher\MonitorSwitcher\MonitorSwitcher.csproj">
+    <ProjectReference Include="..\MonitorSwitcher\MonitorSwitcher.csproj">
       <Project>{531c5395-5eec-4629-a285-b40105aaf593}</Project>
       <Name>MonitorSwitcher</Name>
     </ProjectReference>
