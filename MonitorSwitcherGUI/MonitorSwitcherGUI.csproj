@@ -53,7 +53,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>MainIcon.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\MainIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>D68D907E14D37EFE956A0D2EAC5E64D290B6627A</ManifestCertificateThumbprint>
@@ -90,23 +90,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="GlobalKeyboardHook.cs" />
     <Compile Include="Hotkey.cs" />
     <Compile Include="HotkeyCtrl.cs" />
-    <Compile Include="Program.cs">
+    <Compile Include="MonitorSwitcherGUI.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SendMessageAPI.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -130,25 +122,25 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="DeleteProfile.ico" />
+    <EmbeddedResource Include="Resources\DeleteProfile.ico" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Profile.ico" />
+    <EmbeddedResource Include="Resources\Profile.ico" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Exit.ico" />
+    <EmbeddedResource Include="Resources\Exit.ico" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MainIcon.ico" />
+    <EmbeddedResource Include="Resources\MainIcon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="SaveProfile.ico" />
+    <EmbeddedResource Include="Resources\SaveProfile.ico" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="NewProfile.ico" />
+    <EmbeddedResource Include="Resources\NewProfile.ico" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="About.ico" />
+    <EmbeddedResource Include="Resources\About.ico" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
@@ -185,13 +177,13 @@
     </PublishFile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Hotkey.ico" />
+    <EmbeddedResource Include="Resources\Hotkey.ico" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PayPal.png" />
+    <EmbeddedResource Include="Resources\PayPal.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonitorSwitcher\MonitorSwitcher.csproj">
@@ -199,6 +191,7 @@
       <Name>MonitorSwitcher</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

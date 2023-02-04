@@ -29,15 +29,15 @@ namespace MonitorSwitcherGUI
             hotkeyCtrl.Shift = Shift;
             hotkeyCtrl.Control = Ctrl;
             hotkeyCtrl.KeyCode = Key;
-            hotkeyCtrl.Pressed += new HandledEventHandler(parent.KeyHook_KeyUp);
+            hotkeyCtrl.Pressed += parent.KeyHook_KeyUp;
 
-            if (!hotkeyCtrl.GetCanRegister(parent))
+            if (hotkeyCtrl.GetCanRegister(parent))
             {
-                // something went wrong, ignore for nw
+                hotkeyCtrl.Register(parent);
             }
             else
             {
-                hotkeyCtrl.Register(parent);
+                // something went wrong, ignore for nw
             }
         }
 
@@ -59,19 +59,19 @@ namespace MonitorSwitcherGUI
 
         public override string ToString()
         {
-            List<string> keys = new List<string>();
+            var keys = new List<string>();
 
-            if (Ctrl == true)
+            if (Ctrl)
             {
                 keys.Add("CTRL");
             }
 
-            if (Alt == true)
+            if (Alt)
             {
                 keys.Add("ALT");
             }
 
-            if (Shift == true)
+            if (Shift)
             {
                 keys.Add("SHIFT");
             }

@@ -237,19 +237,13 @@ namespace MonitorSwitcherGUI
             return modifiers + keyName;
         }
 
-		public bool Empty
-		{
-			get { return this.keyCode == Keys.None; }
-		}
+		public bool Empty => this.keyCode == Keys.None;
 
-		public bool Registered
-		{
-			get { return this.registered; }
-		}
+        public bool Registered => this.registered;
 
         public Keys KeyCode
         {
-            get { return this.keyCode; }
+            get => this.keyCode;
             set
 			{
 				// Save and reregister
@@ -260,7 +254,7 @@ namespace MonitorSwitcherGUI
 
         public bool Shift
         {
-            get { return this.shift; }
+            get => this.shift;
             set 
 			{
 				// Save and reregister
@@ -271,7 +265,7 @@ namespace MonitorSwitcherGUI
 
         public bool Control
         {
-            get { return this.control; }
+            get => this.control;
             set
 			{ 
 				// Save and reregister
@@ -282,7 +276,7 @@ namespace MonitorSwitcherGUI
 
         public bool Alt
         {
-            get { return this.alt; }
+            get => this.alt;
             set
 			{ 
 				// Save and reregister
@@ -293,7 +287,7 @@ namespace MonitorSwitcherGUI
 
 		public bool Windows
 		{
-			get { return this.windows; }
+			get => this.windows;
 			set 
 			{
 				// Save and reregister
