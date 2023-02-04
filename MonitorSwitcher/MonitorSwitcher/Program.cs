@@ -5,9 +5,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Windows.Forms;
 using System.Xml;
 using System.IO;
 
@@ -15,10 +12,10 @@ namespace MonitorSwitcherGUI
 {
     public class MonitorSwitcher
     {
-        private static Boolean debug;
-        private static Boolean noIDMatch;
+        private static bool debug;
+        private static bool noIDMatch;
 
-        public static void DebugOutput(String text)
+        public static void DebugOutput(string text)
         {
             if (debug)
             {
@@ -26,7 +23,7 @@ namespace MonitorSwitcherGUI
             }
         }
 
-        public static Boolean LoadDisplaySettings(String fileName)
+        public static bool LoadDisplaySettings(string fileName)
         {
             DebugOutput("Loading display settings from file: " + fileName);
             if (!File.Exists(fileName))
@@ -69,7 +66,7 @@ namespace MonitorSwitcherGUI
                     CCDWrapper.DisplayConfigModeInfo modeInfo = new CCDWrapper.DisplayConfigModeInfo();
                     xml.Read();
                     xml.Read();
-                    modeInfo.id = Convert.ToUInt32(xml.Value);                    
+                    modeInfo.id = Convert.ToUInt32(xml.Value);
                     xml.Read();
                     xml.Read();
                     modeInfo.adapterId = (CCDWrapper.LUID)readerModeAdapterID.Deserialize(xml);
@@ -89,7 +86,8 @@ namespace MonitorSwitcherGUI
 
                     modeInfoList.Add(modeInfo);
                     continue;
-                } else if ((xml.Name.CompareTo("MonitorAdditionalInfo") == 0) && (xml.IsStartElement()))
+                }
+                else if ((xml.Name.CompareTo("MonitorAdditionalInfo") == 0) && (xml.IsStartElement()))
                 {
                     DebugOutput("\t\tReading additional informations");
                     CCDWrapper.MonitorAdditionalInfo additionalInfo = (CCDWrapper.MonitorAdditionalInfo)readerAdditionalInfo.Deserialize(xml);
@@ -97,7 +95,7 @@ namespace MonitorSwitcherGUI
                     continue;
                 }
 
-                    if (!xml.Read())
+                if (!xml.Read())
                 {
                     break;
                 }
@@ -121,11 +119,11 @@ namespace MonitorSwitcherGUI
 
             // Get current display settings
             DebugOutput("Getting current display settings");
-            CCDWrapper.DisplayConfigPathInfo[] pathInfoArrayCurrent = new CCDWrapper.DisplayConfigPathInfo[0];
-            CCDWrapper.DisplayConfigModeInfo[] modeInfoArrayCurrent = new CCDWrapper.DisplayConfigModeInfo[0];
-            CCDWrapper.MonitorAdditionalInfo[] additionalInfoCurrent = new CCDWrapper.MonitorAdditionalInfo[0];
+            CCDWrapper.DisplayConfigPathInfo[] pathInfoArrayCurrent = Array.Empty<CCDWrapper.DisplayConfigPathInfo>();
+            CCDWrapper.DisplayConfigModeInfo[] modeInfoArrayCurrent = Array.Empty<CCDWrapper.DisplayConfigModeInfo>();
+            CCDWrapper.MonitorAdditionalInfo[] additionalInfoCurrent = Array.Empty<CCDWrapper.MonitorAdditionalInfo>();
 
-            Boolean statusCurrent = GetDisplaySettings(ref pathInfoArrayCurrent, ref modeInfoArrayCurrent, ref additionalInfoCurrent, false);
+            bool statusCurrent = GetDisplaySettings(ref pathInfoArrayCurrent, ref modeInfoArrayCurrent, ref additionalInfoCurrent, false);
             if (statusCurrent)
             {
                 if (!noIDMatch)
@@ -219,7 +217,7 @@ namespace MonitorSwitcherGUI
                                                           CCDWrapper.SdcFlags.Apply | CCDWrapper.SdcFlags.UseSuppliedDisplayConfig | CCDWrapper.SdcFlags.SaveToDatabase | CCDWrapper.SdcFlags.NoOptimization | CCDWrapper.SdcFlags.AllowChanges);
                 if (status != 0)
                 {
-                    Console.WriteLine("Failed to set display settings using default method, ERROR: " + status.ToString());                    
+                    Console.WriteLine("Failed to set display settings using default method, ERROR: " + status.ToString());
 
                     if ((additionalInfoCurrent.Length > 0) && (additionalInfoList.Count > 0)) // only if present, e.g. new profile
                     {
@@ -246,7 +244,7 @@ namespace MonitorSwitcherGUI
                                 {
                                     if (additionalInfoCurrent[iAdditionalInfoCurrent].monitorFriendlyDevice.Equals(additionalInfoList[iModeInfo].monitorFriendlyDevice))
                                     {
-                                        CCDWrapper.LUID originalID = modeInfoArray[iModeInfo].adapterId;                                        
+                                        CCDWrapper.LUID originalID = modeInfoArray[iModeInfo].adapterId;
                                         // now also find all other matching pathInfo modeInfos with that ID and change it
                                         for (int iPathInfo = 0; iPathInfo < pathInfoArray.Length; iPathInfo++)
                                         {
@@ -263,7 +261,7 @@ namespace MonitorSwitcherGUI
                                             if ((modeInfoArray[iModeInfoFix].adapterId.LowPart == originalID.LowPart) &&
                                                 (modeInfoArray[iModeInfoFix].adapterId.HighPart == originalID.HighPart))
                                             {
-                                                modeInfoArray[iModeInfoFix].adapterId = modeInfoArrayCurrent[iAdditionalInfoCurrent].adapterId;                                                
+                                                modeInfoArray[iModeInfoFix].adapterId = modeInfoArrayCurrent[iAdditionalInfoCurrent].adapterId;
                                             }
                                         }
                                         modeInfoArray[iModeInfo].adapterId = modeInfoArrayCurrent[iAdditionalInfoCurrent].adapterId;
@@ -292,7 +290,7 @@ namespace MonitorSwitcherGUI
                     }
                     return false;
                 }
-                
+
                 return true;
             }
 
@@ -300,7 +298,7 @@ namespace MonitorSwitcherGUI
             return false;
         }
 
-        public static Boolean GetDisplaySettings(ref CCDWrapper.DisplayConfigPathInfo[] pathInfoArray, ref CCDWrapper.DisplayConfigModeInfo[] modeInfoArray, ref CCDWrapper.MonitorAdditionalInfo[] additionalInfo, Boolean ActiveOnly)
+        public static bool GetDisplaySettings(ref CCDWrapper.DisplayConfigPathInfo[] pathInfoArray, ref CCDWrapper.DisplayConfigModeInfo[] modeInfoArray, ref CCDWrapper.MonitorAdditionalInfo[] additionalInfo, bool ActiveOnly)
         {
             uint numPathArrayElements;
             uint numModeInfoArrayElements;
@@ -324,7 +322,7 @@ namespace MonitorSwitcherGUI
                 DebugOutput("Querying display config");
                 status = CCDWrapper.QueryDisplayConfig(queryFlags,
                                                        ref numPathArrayElements, pathInfoArray, ref numModeInfoArrayElements,
-                                                       modeInfoArray, IntPtr.Zero);                    
+                                                       modeInfoArray, IntPtr.Zero);
 
                 if (status == 0)
                 {
@@ -387,18 +385,20 @@ namespace MonitorSwitcherGUI
                             {
                                 additionalInfo[iMode] = CCDWrapper.GetMonitorAdditionalInfo(modeInfoArray[iMode].adapterId, modeInfoArray[iMode].id);
                             }
-                            catch (Exception e)
+                            catch (Exception)
                             {
                                 additionalInfo[iMode].valid = false;
                             }
                         }
                     }
                     return true;
-                } else
+                }
+                else
                 {
                     DebugOutput("Querying display config failed");
                 }
-            } else
+            }
+            else
             {
                 DebugOutput("Getting Buffer Size Failed");
             }
@@ -406,15 +406,15 @@ namespace MonitorSwitcherGUI
             return false;
         }
 
-        public static String PrintDisplaySettings(CCDWrapper.DisplayConfigPathInfo[] pathInfoArray, CCDWrapper.DisplayConfigModeInfo[] modeInfoArray)
+        public static string PrintDisplaySettings(CCDWrapper.DisplayConfigPathInfo[] pathInfoArray, CCDWrapper.DisplayConfigModeInfo[] modeInfoArray)
         {
             // initialize result
-            String output = "";
+            string output = "";
 
             // initialize text writer
             StringWriter textWriter = new StringWriter();
 
-            
+
             // initialize xml serializer
             System.Xml.Serialization.XmlSerializer writerPath = new System.Xml.Serialization.XmlSerializer(typeof(CCDWrapper.DisplayConfigPathInfo));
             System.Xml.Serialization.XmlSerializer writerModeTarget = new System.Xml.Serialization.XmlSerializer(typeof(CCDWrapper.DisplayConfigTargetMode));
@@ -455,79 +455,80 @@ namespace MonitorSwitcherGUI
             return output;
         }
 
-        public static Boolean SaveDisplaySettings(String fileName)
+        public static bool SaveDisplaySettings(string fileName)
         {
-            CCDWrapper.DisplayConfigPathInfo[] pathInfoArray = new CCDWrapper.DisplayConfigPathInfo[0];
-            CCDWrapper.DisplayConfigModeInfo[] modeInfoArray = new CCDWrapper.DisplayConfigModeInfo[0];
-            CCDWrapper.MonitorAdditionalInfo[] additionalInfo = new CCDWrapper.MonitorAdditionalInfo[0];
+            CCDWrapper.DisplayConfigPathInfo[] pathInfoArray = Array.Empty<CCDWrapper.DisplayConfigPathInfo>();
+            CCDWrapper.DisplayConfigModeInfo[] modeInfoArray = Array.Empty<CCDWrapper.DisplayConfigModeInfo>();
+            CCDWrapper.MonitorAdditionalInfo[] additionalInfo = Array.Empty<CCDWrapper.MonitorAdditionalInfo>();
 
             DebugOutput("Getting display config");
-            Boolean status = GetDisplaySettings(ref pathInfoArray, ref modeInfoArray, ref additionalInfo, true);
-            if (status) 
+            bool status = GetDisplaySettings(ref pathInfoArray, ref modeInfoArray, ref additionalInfo, true);
+            if (!status)
             {
-                if (debug)
-                {
-                    // debug output complete display settings
-                    DebugOutput("Display settings to write:");
-                    Console.WriteLine(PrintDisplaySettings(pathInfoArray, modeInfoArray));
-                }
-
-                DebugOutput("Initializing objects for Serialization");
-                System.Xml.Serialization.XmlSerializer writerAdditionalInfo = new System.Xml.Serialization.XmlSerializer(typeof(CCDWrapper.MonitorAdditionalInfo));
-                System.Xml.Serialization.XmlSerializer writerPath = new System.Xml.Serialization.XmlSerializer(typeof(CCDWrapper.DisplayConfigPathInfo));
-                System.Xml.Serialization.XmlSerializer writerModeTarget = new System.Xml.Serialization.XmlSerializer(typeof(CCDWrapper.DisplayConfigTargetMode));
-                System.Xml.Serialization.XmlSerializer writerModeSource = new System.Xml.Serialization.XmlSerializer(typeof(CCDWrapper.DisplayConfigSourceMode));
-                System.Xml.Serialization.XmlSerializer writerModeInfoType = new System.Xml.Serialization.XmlSerializer(typeof(CCDWrapper.DisplayConfigModeInfoType));
-                System.Xml.Serialization.XmlSerializer writerModeAdapterID = new System.Xml.Serialization.XmlSerializer(typeof(CCDWrapper.LUID));
-                XmlWriter xml = XmlWriter.Create(fileName);
-
-                xml.WriteStartDocument();
-                xml.WriteStartElement("displaySettings");
-                xml.WriteStartElement("pathInfoArray");
-                foreach (CCDWrapper.DisplayConfigPathInfo pathInfo in pathInfoArray)
-                {
-                    writerPath.Serialize(xml, pathInfo);
-                }
-                xml.WriteEndElement();
-
-                xml.WriteStartElement("modeInfoArray");
-                for (int iModeInfo = 0; iModeInfo < modeInfoArray.Length; iModeInfo++)
-                {
-                    xml.WriteStartElement("modeInfo");
-                    CCDWrapper.DisplayConfigModeInfo modeInfo = modeInfoArray[iModeInfo];
-                    xml.WriteElementString("id", modeInfo.id.ToString());
-                    writerModeAdapterID.Serialize(xml, modeInfo.adapterId);
-                    writerModeInfoType.Serialize(xml, modeInfo.infoType);
-                    if (modeInfo.infoType == CCDWrapper.DisplayConfigModeInfoType.Target)
-                    {
-                        writerModeTarget.Serialize(xml, modeInfo.targetMode);
-                    }
-                    else
-                    {
-                        writerModeSource.Serialize(xml, modeInfo.sourceMode);
-                    }
-                    xml.WriteEndElement();
-                }
-                xml.WriteEndElement();
-
-                xml.WriteStartElement("additionalInfo");
-                for (int iAdditionalInfo = 0; iAdditionalInfo < additionalInfo.Length; iAdditionalInfo++)
-                {
-                    writerAdditionalInfo.Serialize(xml, additionalInfo[iAdditionalInfo]);
-                }
-                xml.WriteEndElement();
-                xml.WriteEndDocument();
-                xml.Flush();
-                xml.Close();
-
-                return true;
+                Console.WriteLine("Failed to get display settings, ERROR: " + status);
+                return false;
             }
-            else
-            {                    
-                Console.WriteLine("Failed to get display settings, ERROR: " + status.ToString());
-            }                
 
-            return false;
+            if (debug)
+            {
+                // debug output complete display settings
+                DebugOutput("Display settings to write:");
+                Console.WriteLine(PrintDisplaySettings(pathInfoArray, modeInfoArray));
+            }
+
+            DebugOutput("Initializing objects for Serialization");
+            System.Xml.Serialization.XmlSerializer writerAdditionalInfo = new System.Xml.Serialization.XmlSerializer(typeof(CCDWrapper.MonitorAdditionalInfo));
+            System.Xml.Serialization.XmlSerializer writerPath = new System.Xml.Serialization.XmlSerializer(typeof(CCDWrapper.DisplayConfigPathInfo));
+            System.Xml.Serialization.XmlSerializer writerModeTarget = new System.Xml.Serialization.XmlSerializer(typeof(CCDWrapper.DisplayConfigTargetMode));
+            System.Xml.Serialization.XmlSerializer writerModeSource = new System.Xml.Serialization.XmlSerializer(typeof(CCDWrapper.DisplayConfigSourceMode));
+            System.Xml.Serialization.XmlSerializer writerModeInfoType = new System.Xml.Serialization.XmlSerializer(typeof(CCDWrapper.DisplayConfigModeInfoType));
+            System.Xml.Serialization.XmlSerializer writerModeAdapterID = new System.Xml.Serialization.XmlSerializer(typeof(CCDWrapper.LUID));
+            XmlWriter xml = XmlWriter.Create(fileName);
+
+            xml.WriteStartDocument();
+            xml.WriteStartElement("displaySettings");
+            xml.WriteStartElement("pathInfoArray");
+            foreach (CCDWrapper.DisplayConfigPathInfo pathInfo in pathInfoArray)
+            {
+                writerPath.Serialize(xml, pathInfo);
+            }
+
+            xml.WriteEndElement();
+
+            xml.WriteStartElement("modeInfoArray");
+            for (int iModeInfo = 0; iModeInfo < modeInfoArray.Length; iModeInfo++)
+            {
+                xml.WriteStartElement("modeInfo");
+                CCDWrapper.DisplayConfigModeInfo modeInfo = modeInfoArray[iModeInfo];
+                xml.WriteElementString("id", modeInfo.id.ToString());
+                writerModeAdapterID.Serialize(xml, modeInfo.adapterId);
+                writerModeInfoType.Serialize(xml, modeInfo.infoType);
+                if (modeInfo.infoType == CCDWrapper.DisplayConfigModeInfoType.Target)
+                {
+                    writerModeTarget.Serialize(xml, modeInfo.targetMode);
+                }
+                else
+                {
+                    writerModeSource.Serialize(xml, modeInfo.sourceMode);
+                }
+
+                xml.WriteEndElement();
+            }
+
+            xml.WriteEndElement();
+
+            xml.WriteStartElement("additionalInfo");
+            for (int iAdditionalInfo = 0; iAdditionalInfo < additionalInfo.Length; iAdditionalInfo++)
+            {
+                writerAdditionalInfo.Serialize(xml, additionalInfo[iAdditionalInfo]);
+            }
+
+            xml.WriteEndElement();
+            xml.WriteEndDocument();
+            xml.Flush();
+            xml.Close();
+
+            return true;
         }
 
         static void Main(string[] args)
@@ -535,7 +536,7 @@ namespace MonitorSwitcherGUI
             debug = false;
             noIDMatch = false;
 
-            Boolean validCommand = false;
+            bool validCommand = false;
             foreach (string iArg in args)
             {
                 string[] argElements = iArg.Split(new char[] { ':' }, 2);
@@ -559,11 +560,11 @@ namespace MonitorSwitcherGUI
                         validCommand = true;
                         break;
                     case "-print":
-                        CCDWrapper.DisplayConfigPathInfo[] pathInfoArray = new CCDWrapper.DisplayConfigPathInfo[0];
-                        CCDWrapper.DisplayConfigModeInfo[] modeInfoArray = new CCDWrapper.DisplayConfigModeInfo[0];
-                        CCDWrapper.MonitorAdditionalInfo[] additionalInfo = new CCDWrapper.MonitorAdditionalInfo[0];
+                        CCDWrapper.DisplayConfigPathInfo[] pathInfoArray = Array.Empty<CCDWrapper.DisplayConfigPathInfo>();
+                        CCDWrapper.DisplayConfigModeInfo[] modeInfoArray = Array.Empty<CCDWrapper.DisplayConfigModeInfo>();
+                        CCDWrapper.MonitorAdditionalInfo[] additionalInfo = Array.Empty<CCDWrapper.MonitorAdditionalInfo>();
 
-                        Boolean status = GetDisplaySettings(ref pathInfoArray, ref modeInfoArray, ref additionalInfo, true);
+                        bool status = GetDisplaySettings(ref pathInfoArray, ref modeInfoArray, ref additionalInfo, true);
                         if (status)
                         {
                             Console.WriteLine(PrintDisplaySettings(pathInfoArray, modeInfoArray));
@@ -577,22 +578,22 @@ namespace MonitorSwitcherGUI
                 }
             }
 
-            if (!validCommand)
-            {
-                Console.WriteLine("Monitor Profile Switcher command line utlility (version 0.8.0.0):\n");
-                Console.WriteLine("Paremeters to MonitorSwitcher.exe:");
-                Console.WriteLine("\t -save:{xmlfile} \t save the current monitor configuration to file (full path)");
-                Console.WriteLine("\t -load:{xmlfile} \t load and apply monitor configuration from file (full path)");
-                Console.WriteLine("\t -debug \t\t enable debug output (parameter must come before -load or -save)");
-                Console.WriteLine("\t -noidmatch \t\t disable matching of adapter IDs");
-                Console.WriteLine("\t -print \t\t print current monitor configuration to console");
-                Console.WriteLine("");
-                Console.WriteLine("Examples:");
-                Console.WriteLine("\tMonitorSwitcher.exe -save:MyProfile.xml");
-                Console.WriteLine("\tMonitorSwitcher.exe -load:MyProfile.xml");
-                Console.WriteLine("\tMonitorSwitcher.exe -debug -load:MyProfile.xml");
-                Console.ReadKey();
-            }
+            if (validCommand)
+                return;
+
+            Console.WriteLine("Monitor Profile Switcher command line utlility (version 0.8.0.0):\n");
+            Console.WriteLine("Paremeters to MonitorSwitcher.exe:");
+            Console.WriteLine("\t -save:{xmlfile} \t save the current monitor configuration to file (full path)");
+            Console.WriteLine("\t -load:{xmlfile} \t load and apply monitor configuration from file (full path)");
+            Console.WriteLine("\t -debug \t\t enable debug output (parameter must come before -load or -save)");
+            Console.WriteLine("\t -noidmatch \t\t disable matching of adapter IDs");
+            Console.WriteLine("\t -print \t\t print current monitor configuration to console");
+            Console.WriteLine("");
+            Console.WriteLine("Examples:");
+            Console.WriteLine("\tMonitorSwitcher.exe -save:MyProfile.xml");
+            Console.WriteLine("\tMonitorSwitcher.exe -load:MyProfile.xml");
+            Console.WriteLine("\tMonitorSwitcher.exe -debug -load:MyProfile.xml");
+            Console.ReadKey();
         }
     }
 }
