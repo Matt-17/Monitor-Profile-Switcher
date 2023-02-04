@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.ComponentModel;
+using System.Runtime.InteropServices;
 using System.Xml.Serialization;
 
-namespace MonitorSwitcherGUI
+namespace MonitorSwitcher
 {
     /// <summary>
     /// This class takes care of wrapping "Connecting and Configuring Displays(CCD) Win32 API"

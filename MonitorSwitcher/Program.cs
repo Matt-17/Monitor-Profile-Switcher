@@ -9,8 +9,6 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
 
-using MonitorSwitcherGUI;
-
 namespace MonitorSwitcher
 {
     public class MonitorSwitcher
